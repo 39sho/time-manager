@@ -1,7 +1,7 @@
-use tush::run_shell::shell_loop;
-use tush::start_screen::render;
+use std::env;
+use time_manager::time_manage;
 
 fn main() {
-    render();
-    shell_loop()
+    let args: Vec<String> = env::args().collect();
+    time_manage::time_manage(args);
 }
