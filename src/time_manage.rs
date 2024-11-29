@@ -1,23 +1,30 @@
 use chrono::{DateTime, Duration, Local};
 use colored::*;
 use csv::{Reader, Writer};
-use std::fs::OpenOptions;
+use std::{
+    fs::{self, OpenOptions},
+    io::{Read, Write},
+};
 
 pub fn init() {
+    fs::create_dir("work").unwrap();
+
     let file = OpenOptions::new()
         .create(true)
         .append(true)
-        .open("start_time_log.csv")
+        .open("work/start_time_log.csv")
         .expect("Failed to open file");
 
     let mut wtr = Writer::from_writer(file);
 
-    let _ = wtr.write_record(&["start"]).expect("Failed to write to CSV");
+    let _ = wtr
+        .write_record(&["start"])
+        .expect("Failed to write to CSV");
 
     let file = OpenOptions::new()
         .create(true)
         .append(true)
-        .open("work_log.csv")
+        .open("work/work_log.csv")
         .expect("Failed to open file");
 
     let mut wtr = Writer::from_writer(file);
@@ -25,13 +32,27 @@ pub fn init() {
     let _ = wtr
         .write_record(&["start", "end", "duration"])
         .expect("Failed to write to CSV");
+
+    OpenOptions::new()
+        .create(true)
+        .write(true)
+        .open("work/work_state.txt")
+        .expect("Failed to open file");
 }
 
 pub fn start() {
+    let mut file = OpenOptions::new()
+        .create(true)
+        .write(true)
+        .open("work/work_state.txt")
+        .expect("Failed to open file");
+
+    file.write(b"working").expect("Failed to write file");
+
     let file = OpenOptions::new()
         .read(true)
         .append(true)
-        .open("start_time_log.csv")
+        .open("work/start_time_log.csv")
         .expect("Failed to open file");
 
     let mut wtr = Writer::from_writer(file);
@@ -43,15 +64,21 @@ pub fn start() {
 }
 
 pub fn end() {
+    let _file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .open("work/work_state.txt")
+        .expect("Failed to open file");
+
     let work_log_file = OpenOptions::new()
         .read(true)
         .append(true)
-        .open("work_log.csv")
+        .open("work/work_log.csv")
         .expect("Failed to open file");
 
     let start_log_file = OpenOptions::new()
         .read(true)
-        .open("start_time_log.csv")
+        .open("work/start_time_log.csv")
         .expect("Failed to open file");
 
     let mut wtr = Writer::from_writer(work_log_file);
@@ -131,4 +158,16 @@ pub fn result() {
     }
 
     println!("sum: {}:{:02}", sum.num_hours(), sum.num_minutes() % 60);
+}
+
+pub fn state() {
+    let mut file = OpenOptions::new()
+        .read(true)
+        .open("work/work_state.txt")
+        .expect("Failed to open file");
+
+    let mut state = String::new();
+    let _ = file.read_to_string(&mut state);
+
+    print!("{state}");
 }

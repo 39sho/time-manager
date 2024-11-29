@@ -19,6 +19,7 @@ fn execute(command: Vec<String>) {
         "in" => time_manage::start(),
         "out" => time_manage::end(),
         "result" => time_manage::result(),
+        "state" => time_manage::state(),
         _ => {
             eprintln!("Invalid action: {}", action);
             process::exit(1);
