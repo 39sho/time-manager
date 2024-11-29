@@ -47,7 +47,7 @@ pub fn start() {
         .open("work/work_state.txt")
         .expect("Failed to open file");
 
-    file.write(b"working").expect("Failed to write file");
+    file.write(b"working ").expect("Failed to write file");
 
     let file = OpenOptions::new()
         .read(true)
