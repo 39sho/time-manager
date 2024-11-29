@@ -15,9 +15,9 @@ fn execute(command: Vec<String>) {
     let action = &command[1];
 
     match action.as_str() {
-        "in" => time_manage::work_start(),
-        "out" => time_manage::work_end(),
-        "result" => time_manage::work_result(),
+        "in" => time_manage::start(),
+        "out" => time_manage::end(),
+        "result" => time_manage::result(),
         _ => {
             eprintln!("Invalid action: {}", action);
             process::exit(1);

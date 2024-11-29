@@ -3,7 +3,7 @@ use colored::*;
 use csv::{Reader, Writer};
 use std::fs::OpenOptions;
 
-pub fn work_start() {
+pub fn start() {
     let file = OpenOptions::new()
         .create(true)
         .append(true)
@@ -18,7 +18,7 @@ pub fn work_start() {
     println!("Work started at {}", now.format("%Y/%m/%d %H:%M"));
 }
 
-pub fn work_end() {
+pub fn end() {
     let work_log_file = OpenOptions::new()
         .create(true)
         .append(true)
@@ -76,7 +76,7 @@ pub fn work_end() {
     );
 }
 
-pub fn work_result() {
+pub fn result() {
     let work_log_file = OpenOptions::new()
         .read(true)
         .append(true)
