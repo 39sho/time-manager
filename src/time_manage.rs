@@ -75,3 +75,36 @@ pub fn work_end() {
         "Wanna go for a smoke?".bright_cyan().bold()
     );
 }
+
+pub fn work_result() {
+    let work_log_file = OpenOptions::new()
+        .read(true)
+        .append(true)
+        .open("work_log.csv")
+        .expect("Failed to open file");
+
+    let mut rdr = Reader::from_reader(work_log_file);
+
+    let results = rdr
+        .records()
+        .map(|record| record.unwrap().get(2).unwrap().to_owned());
+
+    let mut sum = Duration::new(0, 0).unwrap();
+
+    for result in results {
+        println!("{result}");
+
+        let d: Vec<i64> = result
+            .split(':')
+            .map(|r| r.parse::<i64>().unwrap())
+            .collect();
+
+        let duration_min = Duration::hours(d.get(0).unwrap().to_owned());
+        let duration_s = Duration::minutes(d.get(1).unwrap().to_owned());
+
+        sum += duration_min;
+        sum += duration_s;
+    }
+
+    println!("sum: {}:{:02}", sum.num_hours(), sum.num_minutes());
+}
