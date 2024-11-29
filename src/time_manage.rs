@@ -3,9 +3,33 @@ use colored::*;
 use csv::{Reader, Writer};
 use std::fs::OpenOptions;
 
-pub fn start() {
+pub fn init() {
     let file = OpenOptions::new()
         .create(true)
+        .append(true)
+        .open("start_time_log.csv")
+        .expect("Failed to open file");
+
+    let mut wtr = Writer::from_writer(file);
+
+    let _ = wtr.write_record(&["start"]).expect("Failed to write to CSV");
+
+    let file = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open("work_log.csv")
+        .expect("Failed to open file");
+
+    let mut wtr = Writer::from_writer(file);
+
+    let _ = wtr
+        .write_record(&["start", "end", "duration"])
+        .expect("Failed to write to CSV");
+}
+
+pub fn start() {
+    let file = OpenOptions::new()
+        .read(true)
         .append(true)
         .open("start_time_log.csv")
         .expect("Failed to open file");
@@ -20,7 +44,7 @@ pub fn start() {
 
 pub fn end() {
     let work_log_file = OpenOptions::new()
-        .create(true)
+        .read(true)
         .append(true)
         .open("work_log.csv")
         .expect("Failed to open file");

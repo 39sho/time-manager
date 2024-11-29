@@ -15,6 +15,7 @@ fn execute(command: Vec<String>) {
     let action = &command[1];
 
     match action.as_str() {
+        "init" => time_manage::init(),
         "in" => time_manage::start(),
         "out" => time_manage::end(),
         "result" => time_manage::result(),
