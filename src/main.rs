@@ -8,7 +8,7 @@ fn main() {
 
 fn execute(command: Vec<String>) {
     if command.len() != 2 {
-        eprintln!("Usage: work <in|out|result>");
+        eprintln!("Usage: work <init|in|out|result>");
         process::exit(1);
     }
 
