@@ -130,5 +130,5 @@ pub fn result() {
         sum += duration_s;
     }
 
-    println!("sum: {}:{:02}", sum.num_hours(), sum.num_minutes());
+    println!("sum: {}:{:02}", sum.num_hours(), sum.num_minutes() % 60);
 }
