@@ -2,27 +2,8 @@ use chrono::{DateTime, Duration, Local};
 use colored::*;
 use csv::{Reader, Writer};
 use std::fs::OpenOptions;
-use std::process;
 
-pub fn time_manage(command: Vec<String>) {
-    if command.len() != 2 {
-        eprintln!("Usage: work <in|out>");
-        process::exit(1);
-    }
-
-    let action = &command[1];
-
-    match action.as_str() {
-        "in" => work_start(),
-        "out" => work_end(),
-        _ => {
-            eprintln!("Invalid action: {}", action);
-            process::exit(1);
-        }
-    }
-}
-
-fn work_start() {
+pub fn work_start() {
     let file = OpenOptions::new()
         .create(true)
         .append(true)
@@ -37,7 +18,7 @@ fn work_start() {
     println!("Work started at {}", now.format("%Y/%m/%d %H:%M"));
 }
 
-fn work_end() {
+pub fn work_end() {
     let work_log_file = OpenOptions::new()
         .create(true)
         .append(true)
