@@ -2,7 +2,7 @@ use chrono::{DateTime, Duration, Local};
 use colored::*;
 use csv::{Reader, Writer};
 use std::fs::OpenOptions;
-use std::{env, process};
+use std::process;
 
 pub fn time_manage(command: Vec<String>) {
     if command.len() != 2 {
@@ -23,12 +23,10 @@ pub fn time_manage(command: Vec<String>) {
 }
 
 fn work_start() {
-    let path = env::current_exe().unwrap().parent().unwrap().to_string_lossy().into_owned();
-
     let file = OpenOptions::new()
         .create(true)
         .append(true)
-        .open(format!("{path}/start_time_log.csv"))
+        .open("start_time_log.csv")
         .expect("Failed to open file");
 
     let mut wtr = Writer::from_writer(file);
@@ -40,17 +38,15 @@ fn work_start() {
 }
 
 fn work_end() {
-    let path = env::current_exe().unwrap().parent().unwrap().to_string_lossy().into_owned();
-
     let work_log_file = OpenOptions::new()
         .create(true)
         .append(true)
-        .open(format!("{path}/work_log.csv"))
+        .open("work_log.csv")
         .expect("Failed to open file");
 
     let start_log_file = OpenOptions::new()
         .read(true)
-        .open(format!("{path}/start_time_log.csv"))
+        .open("start_time_log.csv")
         .expect("Failed to open file");
 
     let mut wtr = Writer::from_writer(work_log_file);
