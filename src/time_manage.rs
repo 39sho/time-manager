@@ -131,7 +131,7 @@ pub fn result() {
     let work_log_file = OpenOptions::new()
         .read(true)
         .append(true)
-        .open("work_log.csv")
+        .open("work/work_log.csv")
         .expect("Failed to open file");
 
     let mut rdr = Reader::from_reader(work_log_file);
