@@ -7,7 +7,7 @@ fn main() {
 }
 
 fn execute(command: Vec<String>) {
-    if command.len() != 2 {
+    if command.len() == 1 {
         eprintln!("Usage: work <init|in|out|result>");
         process::exit(1);
     }
@@ -18,7 +18,17 @@ fn execute(command: Vec<String>) {
         "init" => time_manage::init(),
         "in" => time_manage::start(),
         "out" => time_manage::end(),
-        "result" => time_manage::result(),
+        "result" => {
+            match &command.get(2) {
+                Some(arg) => {
+                    time_manage::result(arg);
+                }
+                None => {
+                    println!("Usage: work result YYYY-MM");
+                    process::exit(1)
+                }
+            };
+        }
         "state" => time_manage::state(),
         _ => {
             eprintln!("Invalid action: {}", action);

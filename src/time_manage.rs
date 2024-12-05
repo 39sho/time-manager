@@ -7,12 +7,16 @@ use std::{
 };
 
 pub fn init() {
-    fs::create_dir("work").unwrap();
+    let now: DateTime<Local> = Local::now();
+    let month_dirname = now.format("%Y-%m");
+    println!("{month_dirname}");
+
+    fs::create_dir(format!("work/{month_dirname}")).unwrap();
 
     let file = OpenOptions::new()
         .create(true)
         .append(true)
-        .open("work/start_time_log.csv")
+        .open(format!("work/{month_dirname}/start_time_log.csv"))
         .expect("Failed to open file");
 
     let mut wtr = Writer::from_writer(file);
@@ -24,7 +28,7 @@ pub fn init() {
     let file = OpenOptions::new()
         .create(true)
         .append(true)
-        .open("work/work_log.csv")
+        .open(format!("work/{month_dirname}/work_log.csv"))
         .expect("Failed to open file");
 
     let mut wtr = Writer::from_writer(file);
@@ -41,6 +45,9 @@ pub fn init() {
 }
 
 pub fn start() {
+    let now: DateTime<Local> = Local::now();
+    let month_dirname = now.format("%Y-%m");
+
     let mut file = OpenOptions::new()
         .create(true)
         .write(true)
@@ -52,7 +59,7 @@ pub fn start() {
     let file = OpenOptions::new()
         .read(true)
         .append(true)
-        .open("work/start_time_log.csv")
+        .open(format!("work/{month_dirname}/start_time_log.csv"))
         .expect("Failed to open file");
 
     let mut wtr = Writer::from_writer(file);
@@ -64,6 +71,9 @@ pub fn start() {
 }
 
 pub fn end() {
+    let now: DateTime<Local> = Local::now();
+    let month_dirname = now.format("%Y-%m");
+
     let _file = OpenOptions::new()
         .write(true)
         .truncate(true)
@@ -73,12 +83,12 @@ pub fn end() {
     let work_log_file = OpenOptions::new()
         .read(true)
         .append(true)
-        .open("work/work_log.csv")
+        .open(format!("work/{month_dirname}/work_log.csv"))
         .expect("Failed to open file");
 
     let start_log_file = OpenOptions::new()
         .read(true)
-        .open("work/start_time_log.csv")
+        .open(format!("work/{month_dirname}/start_time_log.csv"))
         .expect("Failed to open file");
 
     let mut wtr = Writer::from_writer(work_log_file);
@@ -127,11 +137,11 @@ pub fn end() {
     );
 }
 
-pub fn result() {
+pub fn result(month_arg: &String) {
     let work_log_file = OpenOptions::new()
         .read(true)
         .append(true)
-        .open("work/work_log.csv")
+        .open(format!("work/{month_arg}/work_log.csv"))
         .expect("Failed to open file");
 
     let mut rdr = Reader::from_reader(work_log_file);
